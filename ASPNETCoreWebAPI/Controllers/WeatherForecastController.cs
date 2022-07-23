@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ASPNETCoreWebAPI.Controllers;
 
@@ -21,6 +22,12 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        var throwException = Random.Shared.Next(0, 2);
+
+        if (throwException == 0)
+        {
+            throw new ApplicationException("Oops!!");
+        }
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),

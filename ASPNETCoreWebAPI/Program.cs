@@ -1,9 +1,15 @@
+using ASPNETCoreWebAPI;
+using Serilog;
+using Serilog.Formatting.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ExceptionFilter>();
+});
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console(new JsonFormatter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
